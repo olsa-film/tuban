@@ -1,179 +1,190 @@
-<style>
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: #FAFAE4;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #047954;
-    overflow-x: hidden;
-  }
-
-  main, section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 420px;
-    padding: 1rem;
-  }
-
-  h1 {
-    font-size: 3rem;
-    margin: 0.5em 0 0.2em;
-    text-align: center;
-  }
-
-  #landing-text {
-    font-size: 1rem;
-    margin-top: 0.2em;
-    text-align: center;
-    color: #047954;
-  }
-
-  #frame-preview {
-    margin-top: 10px;
-    width: 160px;
-    user-select: none;
-  }
-
-  .button {
-    background-color: #047954;
-    color: #FAFAE4;
-    border: none;
-    padding: 1em 2em;
-    margin: 10px 0;
-    border-radius: 30px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: 600;
-    width: 100%;
-    max-width: 250px;
-  }
-
-  .button:hover:not(:disabled) {
-    background-color: #036246;
-  }
-
-  .button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  #camera-container {
-    position: relative;
-    display: none;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #222;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 0 15px rgb(4 121 84 / 0.6);
-    margin-top: 10px;
-  }
-
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  #overlay-frame {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    pointer-events: none;
-  }
-
-  #camera-controls {
-    margin-top: 15px;
-    display: none;
-    gap: 15px;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-
-  #countdown {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-top: 10px;
-    height: 45px;
-    color: #047954;
-  }
-
-  #loader {
-    display: none;
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #047954;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    animation: spin 1s linear infinite;
-    margin: 15px 0;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
-  }
-
-  #preview-container {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  #photo-preview {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgb(4 121 84 / 0.5);
-    margin-top: 10px;
-  }
-
-  #preview-buttons {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    align-items: center;
-  }
-
-  /* Cetak */
-  @media print {
-    @page {
-      margin: 0;
-      size: 10cm 10cm;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roso Tuban - Self Photobooth</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
-    body {
+    body, html {
       margin: 0;
       padding: 0;
+      height: 100%;
+      background-color: #f0f0e8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 10cm;
-      width: 10cm;
+      color: #37472E;
+      overflow-x: hidden;
     }
-    img#print-image {
-      width: 10cm;
-      height: 10cm;
-      object-fit: contain;
-      -webkit-print-color-adjust: exact;
+
+    main, section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 1rem;
     }
-  }
-</style>
+
+    h1 {
+      font-size: 3rem;
+      margin: 0.5em 0 0.2em;
+      text-align: center;
+    }
+
+    #landing-text {
+      font-size: 1rem;
+      margin-top: 0.2em;
+      text-align: center;
+      color: #566a3a;
+    }
+
+    #frame-preview {
+      margin-top: 10px;
+      width: 160px;
+      user-select: none;
+    }
+
+    .button {
+      background-color: #4a6541;
+      color: #fff;
+      border: none;
+      padding: 1em 2em;
+      margin: 10px 0;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .button:hover:not(:disabled) {
+      background-color: #667d4b;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #camera-container {
+      position: relative;
+      display: none;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgb(50 70 0 / 0.6);
+      margin-top: 10px;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #overlay-frame {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+    }
+
+    #camera-controls {
+      margin-top: 15px;
+      display: none;
+      gap: 15px;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+    }
+
+    #countdown {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-top: 10px;
+      height: 45px;
+      color: #4a6541;
+    }
+
+    #loader {
+      display: none;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #4a6541;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+      margin: 15px 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+
+    #preview-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    #photo-preview {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgb(50 70 0 / 0.5);
+      margin-top: 10px;
+    }
+
+    #preview-buttons {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      align-items: center;
+    }
+
+    /* Cetak */
+    @media print {
+      @page {
+        margin: 0;
+        size: 10cm 10cm;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10cm;
+        width: 10cm;
+      }
+      img#print-image {
+        width: 10cm;
+        height: 10cm;
+        object-fit: contain;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML & JavaScript tetap -->
+</body>
+</html>
