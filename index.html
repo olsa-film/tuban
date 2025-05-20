@@ -5,23 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Roso Tuban - Self Photobooth</title>
 <style>
-  /* Reset & base */
   * {
     box-sizing: border-box;
   }
-  body, html {
-    margin: 0; padding: 0;
+  html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
-    background-color: #f0f0e8;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background-color: #f0f0e8;
+    color: #37472E;
+  }
+
+  body {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
-    color: #37472E;
+  }
+
+  main#landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   h1 {
@@ -37,10 +44,9 @@
     color: #566a3a;
     user-select: none;
   }
-  
-  /* Buttons */
+
   .button {
-    background-color: #4a6541; /* hijau lumut */
+    background-color: #4a6541;
     color: #fff;
     border: none;
     padding: 1em 3em;
@@ -53,22 +59,22 @@
     font-weight: 600;
     min-width: 220px;
   }
+
   .button:hover:not(:disabled) {
     background-color: #667d4b;
   }
+
   .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  /* Frame preview under landing */
   #frame-preview {
     margin-top: 10px;
     width: 160px;
     user-select: none;
   }
 
-  /* Camera Container */
   #camera-container {
     position: relative;
     display: none;
@@ -87,7 +93,6 @@
     object-fit: cover;
   }
 
-  /* Transparent frame overlay */
   #overlay-frame {
     pointer-events: none;
     user-select: none;
@@ -101,7 +106,6 @@
     background-position: center;
   }
 
-  /* Controls */
   #camera-controls {
     margin-top: 15px;
     display: none;
@@ -109,7 +113,6 @@
     gap: 20px;
   }
 
-  /* Preview Container */
   #preview-container {
     display: none;
     flex-direction: column;
@@ -133,11 +136,10 @@
     gap: 20px;
   }
 
-  /* Loader spinner */
   #loader {
     display: none;
-    border: 6px solid #f3f3f3; /* Light grey */
-    border-top: 6px solid #4a6541; /* hijau lumut */
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #4a6541;
     border-radius: 50%;
     width: 48px;
     height: 48px;
@@ -145,7 +147,6 @@
     margin: 15px auto;
   }
 
-  /* Timer text */
   #countdown {
     font-size: 3rem;
     color: #4a6541;
@@ -160,7 +161,6 @@
     100% { transform: rotate(360deg);}
   }
 
-  /* Print styles */
   @media print {
     @page {
       margin: 0;
@@ -188,41 +188,36 @@
 </head>
 <body>
 
-  <!-- Landing Page -->
-  <main id="landing">
-    <h1>Roso Tuban</h1>
-    <button id="start-btn" class="button">Mulai Foto</button>
-    <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
-    <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166" alt="Frame Tuban" draggable="false" />
-  </main>
+<main id="landing">
+  <h1>Roso Tuban</h1>
+  <button id="start-btn" class="button">Mulai Foto</button>
+  <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
+  <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166" alt="Frame Tuban" draggable="false" />
+</main>
 
-  <!-- Camera Container -->
-  <section id="camera-section" aria-label="Kamera Selfie">
-    <div id="camera-container" aria-live="polite" aria-busy="false">
-      <video id="video" autoplay playsinline></video>
-      <div id="overlay-frame" aria-hidden="true"></div>
-    </div>
-    <div id="countdown" role="timer" aria-live="assertive" aria-atomic="true"></div>
-    <div id="loader" role="alert" aria-live="assertive" aria-atomic="true" aria-label="Loading"></div>
-    <div id="camera-controls">
-      <button id="take-photo-btn" class="button">Ambil Foto</button>
-    </div>
-  </section>
+<section id="camera-section" aria-label="Kamera Selfie">
+  <div id="camera-container" aria-live="polite" aria-busy="false">
+    <video id="video" autoplay playsinline></video>
+    <div id="overlay-frame" aria-hidden="true"></div>
+  </div>
+  <div id="countdown" role="timer" aria-live="assertive" aria-atomic="true"></div>
+  <div id="loader" role="alert" aria-live="assertive" aria-atomic="true" aria-label="Loading"></div>
+  <div id="camera-controls">
+    <button id="take-photo-btn" class="button">Ambil Foto</button>
+  </div>
+</section>
 
-  <!-- Preview Photo -->
-  <section id="preview-container" aria-label="Preview foto">
-    <img id="photo-preview" alt="Preview foto hasil selfie" draggable="false" />
-    <div id="preview-buttons">
-      <button id="retake-btn" class="button">Ulangi Foto</button>
-      <button id="print-btn" class="button">Cetak Foto</button>
-    </div>
-  </section>
+<section id="preview-container" aria-label="Preview foto">
+  <img id="photo-preview" alt="Preview foto hasil selfie" draggable="false" />
+  <div id="preview-buttons">
+    <button id="retake-btn" class="button">Ulangi Foto</button>
+    <button id="print-btn" class="button">Cetak Foto</button>
+  </div>
+</section>
 
-  <!-- Hidden Canvas -->
-  <canvas id="canvas" style="display:none;"></canvas>
+<canvas id="canvas" style="display:none;"></canvas>
 
 <script>
-  // Elemen Referensi
   const landing = document.getElementById('landing');
   const startBtn = document.getElementById('start-btn');
   const cameraSection = document.getElementById('camera-section');
@@ -239,16 +234,14 @@
   const printBtn = document.getElementById('print-btn');
   const canvas = document.getElementById('canvas');
 
-  // Konstanta DPI dan ukuran cm ke pixel (10 cm x 10 cm pada 300 dpi)
   const DPI = 300;
-  const CM_TO_INCH = 0.393701; // 1cm = 0.393701 inch
+  const CM_TO_INCH = 0.393701;
   const SIZE_CM = 10;
-  const WIDTH_PX = Math.floor(DPI * SIZE_CM * CM_TO_INCH); // ~1181 px
+  const WIDTH_PX = Math.floor(DPI * SIZE_CM * CM_TO_INCH);
   const HEIGHT_PX = WIDTH_PX;
 
   let stream = null;
 
-  // Fungsi Start Kamera
   async function startCamera() {
     loader.style.display = 'block';
     countdown.textContent = '';
@@ -267,44 +260,31 @@
         audio: false
       });
       video.srcObject = stream;
-      cameraContainer.setAttribute('aria-busy', 'true');
-
-      // Tunggu video siap
       await new Promise(resolve => {
-        video.onloadedmetadata = () => {
-          resolve();
-        };
+        video.onloadedmetadata = () => resolve();
       });
-
-      cameraContainer.setAttribute('aria-busy', 'false');
       loader.style.display = 'none';
       cameraControls.style.display = 'flex';
     } catch (error) {
       loader.style.display = 'none';
       cameraContainer.style.display = 'none';
-      landing.style.display = 'block';
+      landing.style.display = 'flex';
       alert('Tidak bisa mengakses kamera. Mohon izinkan akses kamera dan coba lagi.');
-      console.error(error);
     }
   }
 
-  // Fungsi Stop Kamera
   function stopCamera() {
-    if(stream) {
+    if (stream) {
       stream.getTracks().forEach(track => track.stop());
       stream = null;
     }
     video.srcObject = null;
   }
 
-  // Fungsi countdown timer 5 detik yang muncul dan valid
   function startCountdown(seconds) {
     return new Promise(resolve => {
       let counter = seconds;
       countdown.textContent = counter;
-      countdown.style.color = '#4a6541';
-      countdown.style.fontWeight = '900';
-
       const interval = setInterval(() => {
         counter--;
         if (counter > 0) {
@@ -318,117 +298,84 @@
     });
   }
 
-  // Fungsi ambil foto gabungkan dgn frame
   async function takePhoto() {
     takePhotoBtn.disabled = true;
     loader.style.display = 'block';
 
     await startCountdown(5);
 
-    // Set canvas ukuran sesuai output cetak (10cm @300dpi ~ 1181 px)
     canvas.width = WIDTH_PX;
     canvas.height = HEIGHT_PX;
     const ctx = canvas.getContext('2d');
 
-    // Tentukan ukuran crop dari video agar 1:1, crop paling tengah secara square
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
     const sideLength = Math.min(videoWidth, videoHeight);
-    // koordinat crop pusat
     const sx = (videoWidth - sideLength) / 2;
     const sy = (videoHeight - sideLength) / 2;
 
-    // Draw cropped video image ke canvas pada ukuran penuh
     ctx.drawImage(video, sx, sy, sideLength, sideLength, 0, 0, canvas.width, canvas.height);
 
-    // Load frame dan gambar di atas canvas
     const frameImage = new Image();
     frameImage.crossOrigin = "anonymous";
     frameImage.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166';
 
-    await new Promise((res, rej) => {
+    await new Promise(res => {
       frameImage.onload = () => {
         ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
         res();
       };
-      frameImage.onerror = () => {
-        console.error('Gagal memuat frame image.');
-        res();
-      };
     });
 
-    // Tampil preview foto
     photoPreview.src = canvas.toDataURL('image/png');
-    photoPreview.alt = 'Preview foto hasil selfie dengan frame';
     previewContainer.style.display = 'flex';
     cameraContainer.style.display = 'none';
     cameraControls.style.display = 'none';
     loader.style.display = 'none';
-
     takePhotoBtn.disabled = false;
 
-    // Stop kamera stream otomatis setelah foto diambil (hemat resource)
     stopCamera();
   }
 
-
-  // Event Listener tombol Mulai Foto
   startBtn.addEventListener('click', () => {
     startCamera();
   });
 
-  // Event Listener tombol Ambil Foto
   takePhotoBtn.addEventListener('click', () => {
     takePhoto();
   });
 
-  // Event Listener tombol Ulangi Foto (Retake)
   retakeBtn.addEventListener('click', () => {
     previewContainer.style.display = 'none';
     startCamera();
   });
 
-  // Event Listener tombol Cetak Foto
   printBtn.addEventListener('click', () => {
-    if(!photoPreview.src) return;
-
-    // Buka jendela baru untuk cetak dengan frame sudah tergabung (canvas hasil)
-    // Gunakan dataURI dari canvas sudah menggabungkan frame & foto
+    if (!photoPreview.src) return;
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
-      <html>
-      <head>
-        <title>Cetak Foto</title>
-        <style>
-          @page {
-            margin: 0;
-            size: 10cm 10cm;
-          }
-          body {
-            margin: 0; padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 10cm;
-            width: 10cm;
-          }
-          img {
-            width: 10cm;
-            height: 10cm;
-            object-fit: contain;
-            margin: 0; padding: 0;
-            -webkit-print-color-adjust: exact;
-          }
-        </style>
-      </head>
-      <body>
-        <img src="${photoPreview.src}" alt="Foto Cetak" id="print-image" />
+      <html><head><title>Cetak Foto</title>
+      <style>
+        @page { margin: 0; size: 10cm 10cm; }
+        body {
+          margin: 0; padding: 0;
+          display: flex; justify-content: center; align-items: center;
+          height: 10cm; width: 10cm;
+        }
+        img {
+          width: 10cm;
+          height: 10cm;
+          object-fit: contain;
+          -webkit-print-color-adjust: exact;
+        }
+      </style>
+      </head><body>
+        <img src="${photoPreview.src}" id="print-image" alt="Foto Cetak" />
         <script>
-          window.onload = () => { setTimeout(() => { window.print(); }, 300); };
-          window.onafterprint = () => { window.close(); };
+          window.onload = () => setTimeout(() => window.print(), 300);
+          window.onafterprint = () => window.close();
         <\/script>
-      </body>
-      </html>
+      </body></html>
     `);
     printWindow.document.close();
   });
@@ -436,4 +383,3 @@
 
 </body>
 </html>
-
