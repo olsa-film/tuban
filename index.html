@@ -8,27 +8,26 @@
   * {
     box-sizing: border-box;
   }
-  html, body {
-    margin: 0;
-    padding: 0;
+  body, html {
+    margin: 0; padding: 0;
     height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f0e8;
-    color: #37472E;
-  }
-
-  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+    color: #37472E;
   }
 
-  main#landing {
+  main, section {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
   }
 
   h1 {
@@ -36,6 +35,7 @@
     margin-bottom: 0.2em;
     font-weight: 700;
     user-select: none;
+    text-align: center;
   }
 
   #landing-text {
@@ -43,6 +43,7 @@
     margin-top: 0.3em;
     color: #566a3a;
     user-select: none;
+    text-align: center;
   }
 
   .button {
@@ -59,11 +60,9 @@
     font-weight: 600;
     min-width: 220px;
   }
-
   .button:hover:not(:disabled) {
     background-color: #667d4b;
   }
-
   .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -100,7 +99,7 @@
     top: 0; left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166');
+    background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -178,9 +177,6 @@
       width: 10cm;
       height: 10cm;
       object-fit: contain;
-      margin: 0;
-      padding: 0;
-      user-select: none;
       -webkit-print-color-adjust: exact;
     }
   }
@@ -188,34 +184,38 @@
 </head>
 <body>
 
-<main id="landing">
-  <h1>Roso Tuban</h1>
-  <button id="start-btn" class="button">Mulai Foto</button>
-  <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
-  <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166" alt="Frame Tuban" draggable="false" />
-</main>
+  <!-- Landing Page -->
+  <main id="landing">
+    <h1>Roso Tuban</h1>
+    <button id="start-btn" class="button">Mulai Foto</button>
+    <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
+    <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104" alt="Frame Tuban" draggable="false" />
+  </main>
 
-<section id="camera-section" aria-label="Kamera Selfie">
-  <div id="camera-container" aria-live="polite" aria-busy="false">
-    <video id="video" autoplay playsinline></video>
-    <div id="overlay-frame" aria-hidden="true"></div>
-  </div>
-  <div id="countdown" role="timer" aria-live="assertive" aria-atomic="true"></div>
-  <div id="loader" role="alert" aria-live="assertive" aria-atomic="true" aria-label="Loading"></div>
-  <div id="camera-controls">
-    <button id="take-photo-btn" class="button">Ambil Foto</button>
-  </div>
-</section>
+  <!-- Kamera -->
+  <section id="camera-section" aria-label="Kamera Selfie">
+    <div id="camera-container" aria-live="polite" aria-busy="false">
+      <video id="video" autoplay playsinline></video>
+      <div id="overlay-frame" aria-hidden="true"></div>
+    </div>
+    <div id="countdown" role="timer" aria-live="assertive" aria-atomic="true"></div>
+    <div id="loader" role="alert" aria-live="assertive" aria-atomic="true" aria-label="Loading"></div>
+    <div id="camera-controls">
+      <button id="take-photo-btn" class="button">Ambil Foto</button>
+    </div>
+  </section>
 
-<section id="preview-container" aria-label="Preview foto">
-  <img id="photo-preview" alt="Preview foto hasil selfie" draggable="false" />
-  <div id="preview-buttons">
-    <button id="retake-btn" class="button">Ulangi Foto</button>
-    <button id="print-btn" class="button">Cetak Foto</button>
-  </div>
-</section>
+  <!-- Preview -->
+  <section id="preview-container" aria-label="Preview foto">
+    <img id="photo-preview" alt="Preview foto hasil selfie" draggable="false" />
+    <div id="preview-buttons">
+      <button id="retake-btn" class="button">Ulangi Foto</button>
+      <button id="print-btn" class="button">Cetak Foto</button>
+    </div>
+  </section>
 
-<canvas id="canvas" style="display:none;"></canvas>
+  <!-- Canvas -->
+  <canvas id="canvas" style="display:none;"></canvas>
 
 <script>
   const landing = document.getElementById('landing');
@@ -223,7 +223,6 @@
   const cameraSection = document.getElementById('camera-section');
   const cameraContainer = document.getElementById('camera-container');
   const video = document.getElementById('video');
-  const overlayFrame = document.getElementById('overlay-frame');
   const loader = document.getElementById('loader');
   const countdown = document.getElementById('countdown');
   const cameraControls = document.getElementById('camera-controls');
@@ -260,21 +259,26 @@
         audio: false
       });
       video.srcObject = stream;
+      cameraContainer.setAttribute('aria-busy', 'true');
+
       await new Promise(resolve => {
         video.onloadedmetadata = () => resolve();
       });
+
+      cameraContainer.setAttribute('aria-busy', 'false');
       loader.style.display = 'none';
       cameraControls.style.display = 'flex';
     } catch (error) {
       loader.style.display = 'none';
       cameraContainer.style.display = 'none';
-      landing.style.display = 'flex';
+      landing.style.display = 'block';
       alert('Tidak bisa mengakses kamera. Mohon izinkan akses kamera dan coba lagi.');
+      console.error(error);
     }
   }
 
   function stopCamera() {
-    if (stream) {
+    if(stream) {
       stream.getTracks().forEach(track => track.stop());
       stream = null;
     }
@@ -285,6 +289,8 @@
     return new Promise(resolve => {
       let counter = seconds;
       countdown.textContent = counter;
+      countdown.style.color = '#4a6541';
+
       const interval = setInterval(() => {
         counter--;
         if (counter > 0) {
@@ -318,11 +324,15 @@
 
     const frameImage = new Image();
     frameImage.crossOrigin = "anonymous";
-    frameImage.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban.png?updatedAt=1747645295166';
+    frameImage.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104';
 
-    await new Promise(res => {
+    await new Promise((res) => {
       frameImage.onload = () => {
         ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+        res();
+      };
+      frameImage.onerror = () => {
+        console.error('Gagal memuat frame image.');
         res();
       };
     });
@@ -332,45 +342,31 @@
     cameraContainer.style.display = 'none';
     cameraControls.style.display = 'none';
     loader.style.display = 'none';
-    takePhotoBtn.disabled = false;
 
+    takePhotoBtn.disabled = false;
     stopCamera();
   }
 
-  startBtn.addEventListener('click', () => {
-    startCamera();
-  });
-
-  takePhotoBtn.addEventListener('click', () => {
-    takePhoto();
-  });
-
+  startBtn.addEventListener('click', startCamera);
+  takePhotoBtn.addEventListener('click', takePhoto);
   retakeBtn.addEventListener('click', () => {
     previewContainer.style.display = 'none';
     startCamera();
   });
 
   printBtn.addEventListener('click', () => {
-    if (!photoPreview.src) return;
+    if(!photoPreview.src) return;
+
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
       <html><head><title>Cetak Foto</title>
-      <style>
-        @page { margin: 0; size: 10cm 10cm; }
-        body {
-          margin: 0; padding: 0;
-          display: flex; justify-content: center; align-items: center;
-          height: 10cm; width: 10cm;
-        }
-        img {
-          width: 10cm;
-          height: 10cm;
-          object-fit: contain;
-          -webkit-print-color-adjust: exact;
-        }
-      </style>
+        <style>
+          @page { margin: 0; size: 10cm 10cm; }
+          body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 10cm; width: 10cm; }
+          img { width: 10cm; height: 10cm; object-fit: contain; -webkit-print-color-adjust: exact; }
+        </style>
       </head><body>
-        <img src="${photoPreview.src}" id="print-image" alt="Foto Cetak" />
+        <img src="${photoPreview.src}" alt="Foto Cetak" id="print-image" />
         <script>
           window.onload = () => setTimeout(() => window.print(), 300);
           window.onafterprint = () => window.close();
@@ -380,6 +376,5 @@
     printWindow.document.close();
   });
 </script>
-
 </body>
 </html>
