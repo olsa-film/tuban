@@ -5,20 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Roso Tuban - Self Photobooth</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    body, html {
+    * { box-sizing: border-box; }
+    html, body {
       margin: 0; padding: 0;
       height: 100%;
-      background-color: #f0f0e8;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f0e8;
+      color: #37472E;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      color: #37472E;
+      justify-content: center;
     }
     main, section {
       width: 100%;
@@ -29,17 +26,15 @@
       align-items: center;
     }
     h1 {
-      font-size: 3.5rem;
-      margin-bottom: 0.2em;
+      font-size: 3rem;
       font-weight: 700;
-      user-select: none;
       text-align: center;
+      user-select: none;
     }
     #landing-text {
-      font-size: 0.9rem;
-      margin-top: 0.3em;
+      margin-top: 0.5em;
+      font-size: 1rem;
       color: #566a3a;
-      user-select: none;
       text-align: center;
     }
     .button {
@@ -47,14 +42,12 @@
       color: #fff;
       border: none;
       padding: 1em 3em;
-      margin: 15px 0;
       border-radius: 30px;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      margin: 10px;
       cursor: pointer;
-      user-select: none;
+      font-weight: bold;
       transition: background-color 0.3s ease;
-      font-weight: 600;
-      min-width: 220px;
     }
     .button:hover:not(:disabled) {
       background-color: #667d4b;
@@ -64,64 +57,56 @@
       cursor: not-allowed;
     }
     #frame-preview {
-      margin-top: 10px;
       width: 160px;
+      margin-top: 10px;
       user-select: none;
     }
     #camera-container {
-      position: relative;
       display: none;
-      max-width: 420px;
+      position: relative;
       width: 90vw;
+      max-width: 420px;
       aspect-ratio: 1 / 1;
-      background: #222;
+      background: #000;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 0 15px rgb(50 70 0 / 0.6);
+      box-shadow: 0 0 15px rgba(50, 70, 0, 0.6);
     }
     video {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transform: scaleX(-1); /* mirror preview */
     }
     #overlay-frame {
-      pointer-events: none;
-      user-select: none;
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
       background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
     }
-    #camera-controls {
+    #camera-controls, #preview-buttons {
       margin-top: 15px;
-      display: none;
+      display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
+      flex-wrap: wrap;
     }
     #preview-container {
       display: none;
       flex-direction: column;
       align-items: center;
-      max-width: 400px;
-      width: 90vw;
     }
     #photo-preview {
-      width: 100%;
+      width: 90vw;
+      max-width: 400px;
       aspect-ratio: 1 / 1;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgb(50 70 0 / 0.5);
-      user-select: none;
-    }
-    #preview-buttons {
-      margin-top: 15px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
+      box-shadow: 0 0 12px rgba(50, 70, 0, 0.5);
     }
     #loader {
       display: none;
@@ -133,28 +118,28 @@
       animation: spin 1s linear infinite;
       margin: 15px auto;
     }
-    #countdown {
-      font-size: 3rem;
-      color: #4a6541;
-      font-weight: 800;
-      user-select: none;
-      margin-top: 10px;
-      height: 45px;
-    }
     @keyframes spin {
       0% { transform: rotate(0deg);}
       100% { transform: rotate(360deg);}
     }
+    #countdown {
+      font-size: 3rem;
+      color: #4a6541;
+      font-weight: bold;
+      height: 50px;
+      margin-top: 10px;
+    }
     @media print {
       @page {
-        margin: 0;
         size: 10cm 10cm;
+        margin: 0;
       }
       body {
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: 10cm;
         width: 10cm;
       }
@@ -168,14 +153,15 @@
   </style>
 </head>
 <body>
+
   <main id="landing">
     <h1>Roso Tuban</h1>
     <button id="start-btn" class="button">Mulai Foto</button>
     <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
-    <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104" alt="Frame Tuban" draggable="false" />
+    <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104" alt="Frame" draggable="false">
   </main>
 
-  <section id="camera-section" aria-label="Kamera Selfie">
+  <section id="camera-section">
     <div id="camera-container">
       <video id="video" autoplay playsinline></video>
       <div id="overlay-frame"></div>
@@ -188,7 +174,7 @@
   </section>
 
   <section id="preview-container">
-    <img id="photo-preview" alt="Preview Foto" draggable="false" />
+    <img id="photo-preview" alt="Preview Foto" draggable="false">
     <div id="preview-buttons">
       <button id="retake-btn" class="button">Ulangi Foto</button>
       <button id="print-btn" class="button">Cetak Foto</button>
@@ -199,8 +185,8 @@
   <canvas id="canvas" style="display:none;"></canvas>
 
   <script>
-    const landing = document.getElementById('landing');
     const startBtn = document.getElementById('start-btn');
+    const landing = document.getElementById('landing');
     const cameraSection = document.getElementById('camera-section');
     const cameraContainer = document.getElementById('camera-container');
     const video = document.getElementById('video');
@@ -225,35 +211,26 @@
 
     async function startCamera() {
       loader.style.display = 'block';
-      countdown.textContent = '';
       cameraControls.style.display = 'none';
-      cameraContainer.style.display = 'block';
       previewContainer.style.display = 'none';
       landing.style.display = 'none';
+      cameraContainer.style.display = 'block';
 
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "user",
-            width: { ideal: 1280 },
-            height: { ideal: 1280 }
-          },
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 1280 } },
           audio: false
         });
         video.srcObject = stream;
-
-        await new Promise(resolve => {
-          video.onloadedmetadata = () => resolve();
-        });
-
+        await new Promise(resolve => video.onloadedmetadata = resolve);
         loader.style.display = 'none';
         cameraControls.style.display = 'flex';
-      } catch (error) {
+      } catch (err) {
+        alert('Tidak bisa mengakses kamera. Periksa izin perangkat.');
+        console.error(err);
         loader.style.display = 'none';
-        cameraContainer.style.display = 'none';
         landing.style.display = 'block';
-        alert('Tidak bisa mengakses kamera. Mohon izinkan akses kamera dan coba lagi.');
-        console.error(error);
+        cameraContainer.style.display = 'none';
       }
     }
 
@@ -267,16 +244,13 @@
 
     function startCountdown(seconds) {
       return new Promise(resolve => {
-        let counter = seconds;
-        countdown.textContent = counter;
-
+        let count = seconds;
+        countdown.textContent = count;
         const interval = setInterval(() => {
-          counter--;
-          if (counter > 0) {
-            countdown.textContent = counter;
-          } else {
+          count--;
+          countdown.textContent = count > 0 ? count : '';
+          if (count <= 0) {
             clearInterval(interval);
-            countdown.textContent = '';
             resolve();
           }
         }, 1000);
@@ -286,29 +260,31 @@
     async function takePhoto() {
       takePhotoBtn.disabled = true;
       loader.style.display = 'block';
-
       await startCountdown(5);
 
       canvas.width = WIDTH_PX;
       canvas.height = HEIGHT_PX;
       const ctx = canvas.getContext('2d');
 
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
-      const sideLength = Math.min(videoWidth, videoHeight);
-      const sx = (videoWidth - sideLength) / 2;
-      const sy = (videoHeight - sideLength) / 2;
+      const vw = video.videoWidth;
+      const vh = video.videoHeight;
+      const side = Math.min(vw, vh);
+      const sx = (vw - side) / 2;
+      const sy = (vh - side) / 2;
 
-      ctx.drawImage(video, sx, sy, sideLength, sideLength, 0, 0, canvas.width, canvas.height);
+      // Mirror the image (horizontal flip)
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, sx, sy, side, side, 0, 0, canvas.width, canvas.height);
 
-      const frameImage = new Image();
-      frameImage.crossOrigin = "anonymous";
-      frameImage.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104';
-
-      await new Promise((res) => {
-        frameImage.onload = () => {
-          ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-          res();
+      const frame = new Image();
+      frame.crossOrigin = "anonymous";
+      frame.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104';
+      await new Promise(resolve => {
+        frame.onload = () => {
+          ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+          ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+          resolve();
         };
       });
 
@@ -329,36 +305,25 @@
     });
 
     printBtn.addEventListener('click', () => {
-      if (!photoPreview.src) return;
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write(`
+      const win = window.open('', '_blank');
+      win.document.write(`
         <html><head><title>Cetak Foto</title>
-          <style>
-            @page { margin: 0; size: 10cm 10cm; }
-            body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 10cm; width: 10cm; }
-            img { width: 10cm; height: 10cm; object-fit: contain; -webkit-print-color-adjust: exact; }
-          </style>
+        <style>@page{size:10cm 10cm;margin:0;}body{margin:0;display:flex;justify-content:center;align-items:center;height:10cm;width:10cm;}img{width:10cm;height:10cm;object-fit:contain;-webkit-print-color-adjust:exact;}</style>
         </head><body>
-          <img src="${photoPreview.src}" id="print-image" />
-          <script>
-            window.onload = () => setTimeout(() => window.print(), 300);
-            window.onafterprint = () => window.close();
-          <\/script>
+        <img src="${photoPreview.src}" id="print-image">
+        <script>window.onload=()=>setTimeout(()=>window.print(),300);window.onafterprint=()=>window.close();<\/script>
         </body></html>
       `);
-      printWindow.document.close();
+      win.document.close();
     });
 
     downloadBtn.addEventListener('click', () => {
-      if (!photoPreview.src) return;
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const link = document.createElement('a');
-      link.href = photoPreview.src;
-      link.download = `Roso_Tuban_${timestamp}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const a = document.createElement('a');
+      a.href = photoPreview.src;
+      a.download = 'foto_rosotuban.png';
+      a.click();
     });
   </script>
+
 </body>
 </html>
