@@ -156,7 +156,6 @@
 
   <main id="landing">
     <h1>Roso Tuban</h1>
-    <button id="start-btn" class="button">Mulai Foto</button>
     <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
     <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104" alt="Frame" draggable="false">
   </main>
@@ -185,8 +184,6 @@
   <canvas id="canvas" style="display:none;"></canvas>
 
   <script>
-    const startBtn = document.getElementById('start-btn');
-    const landing = document.getElementById('landing');
     const cameraSection = document.getElementById('camera-section');
     const cameraContainer = document.getElementById('camera-container');
     const video = document.getElementById('video');
@@ -213,7 +210,6 @@
       loader.style.display = 'block';
       cameraControls.style.display = 'none';
       previewContainer.style.display = 'none';
-      landing.style.display = 'none';
       cameraContainer.style.display = 'block';
 
       try {
@@ -229,7 +225,6 @@
         alert('Tidak bisa mengakses kamera. Periksa izin perangkat.');
         console.error(err);
         loader.style.display = 'none';
-        landing.style.display = 'block';
         cameraContainer.style.display = 'none';
       }
     }
@@ -297,7 +292,7 @@
       stopCamera();
     }
 
-    startBtn.addEventListener('click', startCamera);
+    // startBtn removed
     takePhotoBtn.addEventListener('click', takePhoto);
     retakeBtn.addEventListener('click', () => {
       previewContainer.style.display = 'none';
@@ -323,6 +318,9 @@
       a.download = 'foto_rosotuban.png';
       a.click();
     });
+
+    // Optional: Automatically start camera (optional logic if needed)
+    // startCamera();
   </script>
 
 </body>
