@@ -7,7 +7,8 @@
   <style>
     * { box-sizing: border-box; }
     html, body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       height: 100%;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f0e8;
@@ -29,19 +30,17 @@
       font-size: 3rem;
       font-weight: 700;
       text-align: center;
-      user-select: none;
     }
     #landing-text {
-      margin-top: 0.5em;
       font-size: 1rem;
       color: #566a3a;
       text-align: center;
     }
     .button {
       background-color: #4a6541;
-      color: #fff;
-      border: none;
+      color: white;
       padding: 1em 3em;
+      border: none;
       border-radius: 30px;
       font-size: 1.2rem;
       margin: 10px;
@@ -52,60 +51,45 @@
     .button:hover:not(:disabled) {
       background-color: #667d4b;
     }
-    .button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
     #frame-preview {
       width: 160px;
       margin-top: 10px;
-      user-select: none;
+    }
+    #camera-section,
+    #preview-container {
+      display: none;
     }
     #camera-container {
-      display: none;
-      position: relative;
       width: 90vw;
       max-width: 420px;
-      aspect-ratio: 1 / 1;
-      background: #000;
+      aspect-ratio: 1/1;
+      position: relative;
+      background: black;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 0 15px rgba(50, 70, 0, 0.6);
     }
     video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scaleX(-1); /* mirror preview */
+      transform: scaleX(-1); /* mirror */
     }
     #overlay-frame {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
       background-image: url('https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-    }
-    #camera-controls, #preview-buttons {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-    #preview-container {
-      display: none;
-      flex-direction: column;
-      align-items: center;
+      pointer-events: none;
     }
     #photo-preview {
       width: 90vw;
       max-width: 400px;
-      aspect-ratio: 1 / 1;
       border-radius: 12px;
+      aspect-ratio: 1 / 1;
       box-shadow: 0 0 12px rgba(50, 70, 0, 0.5);
     }
     #loader {
@@ -119,15 +103,8 @@
       margin: 15px auto;
     }
     @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    #countdown {
-      font-size: 3rem;
-      color: #4a6541;
-      font-weight: bold;
-      height: 50px;
-      margin-top: 10px;
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     @media print {
       @page {
@@ -135,13 +112,12 @@
         margin: 0;
       }
       body {
-        margin: 0;
-        padding: 0;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         height: 10cm;
         width: 10cm;
+        margin: 0;
       }
       img#print-image {
         width: 10cm;
@@ -154,28 +130,28 @@
 </head>
 <body>
 
+  <!-- Landing Page -->
   <main id="landing">
     <h1>Roso Tuban</h1>
-    <button id="start-btn" class="button">Mulai Foto</button>
     <p id="landing-text">Jejak Budaya, Pesona Wisata</p>
     <img id="frame-preview" src="https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104" alt="Frame" draggable="false">
+    <button id="start-btn" class="button">Mulai Foto</button>
   </main>
 
+  <!-- Kamera -->
   <section id="camera-section">
     <div id="camera-container">
       <video id="video" autoplay playsinline></video>
       <div id="overlay-frame"></div>
     </div>
-    <div id="countdown"></div>
     <div id="loader"></div>
-    <div id="camera-controls">
-      <button id="take-photo-btn" class="button">Ambil Foto</button>
-    </div>
+    <button id="take-photo-btn" class="button">Ambil Foto</button>
   </section>
 
+  <!-- Preview -->
   <section id="preview-container">
     <img id="photo-preview" alt="Preview Foto" draggable="false">
-    <div id="preview-buttons">
+    <div>
       <button id="retake-btn" class="button">Ulangi Foto</button>
       <button id="print-btn" class="button">Cetak Foto</button>
       <button id="download-btn" class="button">Unduh Foto</button>
@@ -188,11 +164,7 @@
     const startBtn = document.getElementById('start-btn');
     const landing = document.getElementById('landing');
     const cameraSection = document.getElementById('camera-section');
-    const cameraContainer = document.getElementById('camera-container');
     const video = document.getElementById('video');
-    const loader = document.getElementById('loader');
-    const countdown = document.getElementById('countdown');
-    const cameraControls = document.getElementById('camera-controls');
     const takePhotoBtn = document.getElementById('take-photo-btn');
     const previewContainer = document.getElementById('preview-container');
     const photoPreview = document.getElementById('photo-preview');
@@ -200,6 +172,7 @@
     const printBtn = document.getElementById('print-btn');
     const downloadBtn = document.getElementById('download-btn');
     const canvas = document.getElementById('canvas');
+    const loader = document.getElementById('loader');
 
     const DPI = 300;
     const CM_TO_INCH = 0.393701;
@@ -210,27 +183,19 @@
     let stream = null;
 
     async function startCamera() {
-      loader.style.display = 'block';
-      cameraControls.style.display = 'none';
-      previewContainer.style.display = 'none';
       landing.style.display = 'none';
-      cameraContainer.style.display = 'block';
+      cameraSection.style.display = 'flex';
+      loader.style.display = 'block';
 
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 1280 } },
-          audio: false
-        });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
         video.srcObject = stream;
-        await new Promise(resolve => video.onloadedmetadata = resolve);
+        await new Promise(res => video.onloadedmetadata = res);
         loader.style.display = 'none';
-        cameraControls.style.display = 'flex';
       } catch (err) {
-        alert('Tidak bisa mengakses kamera. Periksa izin perangkat.');
-        console.error(err);
-        loader.style.display = 'none';
+        alert("Gagal mengakses kamera. Periksa izin perangkat.");
         landing.style.display = 'block';
-        cameraContainer.style.display = 'none';
+        cameraSection.style.display = 'none';
       }
     }
 
@@ -238,62 +203,37 @@
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
         stream = null;
+        video.srcObject = null;
       }
-      video.srcObject = null;
-    }
-
-    function startCountdown(seconds) {
-      return new Promise(resolve => {
-        let count = seconds;
-        countdown.textContent = count;
-        const interval = setInterval(() => {
-          count--;
-          countdown.textContent = count > 0 ? count : '';
-          if (count <= 0) {
-            clearInterval(interval);
-            resolve();
-          }
-        }, 1000);
-      });
     }
 
     async function takePhoto() {
-      takePhotoBtn.disabled = true;
-      loader.style.display = 'block';
-      await startCountdown(5);
-
       canvas.width = WIDTH_PX;
       canvas.height = HEIGHT_PX;
       const ctx = canvas.getContext('2d');
 
       const vw = video.videoWidth;
       const vh = video.videoHeight;
-      const side = Math.min(vw, vh);
-      const sx = (vw - side) / 2;
-      const sy = (vh - side) / 2;
+      const size = Math.min(vw, vh);
+      const sx = (vw - size) / 2;
+      const sy = (vh - size) / 2;
 
-      // Mirror the image (horizontal flip)
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
-      ctx.drawImage(video, sx, sy, side, side, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, sx, sy, size, size, 0, 0, canvas.width, canvas.height);
 
       const frame = new Image();
-      frame.crossOrigin = "anonymous";
+      frame.crossOrigin = 'anonymous';
       frame.src = 'https://ik.imagekit.io/cei9xcerp/Artboard%201frame%20tuban%202.png?updatedAt=1747658946104';
-      await new Promise(resolve => {
-        frame.onload = () => {
-          ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
-          ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
-          resolve();
-        };
+      await new Promise(res => frame.onload = () => {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+        res();
       });
 
       photoPreview.src = canvas.toDataURL('image/png');
+      cameraSection.style.display = 'none';
       previewContainer.style.display = 'flex';
-      cameraContainer.style.display = 'none';
-      cameraControls.style.display = 'none';
-      loader.style.display = 'none';
-      takePhotoBtn.disabled = false;
       stopCamera();
     }
 
@@ -305,8 +245,8 @@
     });
 
     printBtn.addEventListener('click', () => {
-      const win = window.open('', '_blank');
-      win.document.write(`
+      const w = window.open('', '_blank');
+      w.document.write(`
         <html><head><title>Cetak Foto</title>
         <style>@page{size:10cm 10cm;margin:0;}body{margin:0;display:flex;justify-content:center;align-items:center;height:10cm;width:10cm;}img{width:10cm;height:10cm;object-fit:contain;-webkit-print-color-adjust:exact;}</style>
         </head><body>
@@ -314,7 +254,7 @@
         <script>window.onload=()=>setTimeout(()=>window.print(),300);window.onafterprint=()=>window.close();<\/script>
         </body></html>
       `);
-      win.document.close();
+      w.document.close();
     });
 
     downloadBtn.addEventListener('click', () => {
@@ -324,6 +264,5 @@
       a.click();
     });
   </script>
-
 </body>
 </html>
